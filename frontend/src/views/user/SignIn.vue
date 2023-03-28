@@ -58,10 +58,10 @@ export default {
                 emailId: this.emailId,
                 password: this.password
             }
-            console.log(params);
+
             this.$axios
-                .post(this.$server + "/api/user/login", params)
-                .then((res) =>{
+                .post("/api/user/login", params)
+                .then((res) => {
                     console.log(res);
                 }).catch((err) => {
                     console.log(err);

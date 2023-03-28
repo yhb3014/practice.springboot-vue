@@ -48,14 +48,14 @@
     },
     methods: {
       getBoardList() {
-            this.$axios
-                .get(this.$server + "/api/board/list")
-                .then((res) => {
-                    this.boardList = res.data
-                    console.log(res)
-                }).catch((err) => {
-                    console.log(err)
-                })
+          this.$axios
+              .get("/api/board/list")
+              .then((res) => {
+                  this.boardList = res.data
+                  console.log(res)
+              }).catch((err) => {
+                  console.log(err)
+            })
         }
       }
   }

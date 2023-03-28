@@ -51,6 +51,20 @@ export default {
         console.log(this.userName);
         console.log(this.emailId);
         console.log(this.password);
+
+        const params = {
+            userName: this.userName,
+            emailId: this.emailId,
+            password: this.password
+        }
+
+        this.$axios
+            .post("/api/user/join", params)
+            .then((res) => {
+                console.log(res);
+            }).catch((err) => {
+                console.log(err);
+            })
        }
     }
 }
