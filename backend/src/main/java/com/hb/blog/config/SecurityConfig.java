@@ -1,10 +1,9 @@
 package com.hb.blog.config;
 
-import java.util.Map;
-
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -22,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
         private final JwtAuthenticationFilter jwtAuthenticationFilter;
+        private final AuthenticationProvider authenticationProvider;
 
         @Bean
         public WebSecurityCustomizer webSecurityCustomizer() {
@@ -44,7 +44,8 @@ public class SecurityConfig {
                                 .anyRequest().authenticated();
 
                 http
-                                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                                .authenticationProvider(authenticationProvider);
 
                 return http.build();
         }

@@ -9,17 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoardDto {
+public class LoginDto {
 
-    private int id;
+    private String userName;
 
-    private String title;
-
-    private String content;
-
-    private String user;
-
-    private int count;
-
-    private String createDate;
+    private String password;
 }

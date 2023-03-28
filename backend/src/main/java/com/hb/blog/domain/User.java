@@ -1,7 +1,5 @@
 package com.hb.blog.domain;
 
-import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -36,7 +34,7 @@ public class User extends BaseEntity {
     @Column(length = 50, nullable = false, unique = true)
     private String userName;
 
-    @Column(length = 50, nullable = false)
+    @Column(length = 100, nullable = false)
     private String password;
 
     @Column(length = 50, nullable = false)
