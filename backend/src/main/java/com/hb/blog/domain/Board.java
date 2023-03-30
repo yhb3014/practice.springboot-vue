@@ -22,7 +22,7 @@ public class Board extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "board_id")
-    private int id;
+    private Long id;
 
     @Column(length = 50, nullable = false)
     private String title;
@@ -35,4 +35,5 @@ public class Board extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
+
 }

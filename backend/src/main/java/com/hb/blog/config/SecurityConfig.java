@@ -29,6 +29,11 @@ public class SecurityConfig {
                 return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
         }
 
+        /*
+         * TODO
+         * 1. 권한 설정
+         * 2. handler 구현 (Unauthorize, Forbidden ...)
+         */
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 

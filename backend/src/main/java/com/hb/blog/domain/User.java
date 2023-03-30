@@ -21,9 +21,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class User extends BaseEntity {
 
     @Id

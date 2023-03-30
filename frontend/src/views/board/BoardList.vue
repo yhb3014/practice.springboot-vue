@@ -1,7 +1,9 @@
 <template>
     <div class="mx-60 my-10 min-h-screen">
       <div class="flex justify-end space-x-2 m-2">
-        <button type="button" class="bg-gray-700 hover:bg-gray-600 duration-300 rounded-md text-sm px-4 py-1.5 mr-1 mb-1" v-on:click="doPost">등록</button>
+        <router-link to="/board/write">
+          <button type="button" class="bg-gray-700 hover:bg-gray-600 duration-300 rounded-md text-sm px-4 py-1.5 mr-1 mb-1">등록</button>
+        </router-link>
       </div>
       <div class="flex flex-col">
         <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">

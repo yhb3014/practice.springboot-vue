@@ -32,23 +32,22 @@ public class UserService {
      * @param user
      * @return
      */
-    public int join(User user) {
+    public User join(User user) {
         if (!checkDuplicateUser(user)) {
             String encPassword = passwordEncoder.encode(user.getPassword());
             user.setPassword(encPassword);
-            userRepository.save(user);
-            return 1;
+            User saveUser = userRepository.save(user);
+            return saveUser;
         }
 
-        return 0;
+        return null;
     }
 
     /**
      * JWT 로그인
      * 
      * TODO
-     * 1. ERROR
-     * 2. refreshToken
+     * 1. refreshToken
      * 
      * @param loginDto
      * @return
