@@ -1,30 +1,35 @@
 <template>
-  <SummernoteEditor
-      v-model="myValue"
-      @update:modelValue="summernoteChange($event)"
-      @summernoteImageLinkInsert="summernoteImageLinkInsert"
-    />
+    <QuillEditor ref="editor"/>
 </template>
+
 <script>
-import SummernoteEditor from 'vue3-summernote-editor';
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
 export default {
-    // declare SummernoteEditor
-    components: {
-      SummernoteEditor
-    },
-    data() {
-        return {
-            myValue: '',
-        }
-    },
-    methods: {
-       summernoteChange(newValue) {
-          console.log("summernoteChange", newValue);
-       },
-        summernoteImageLinkInsert(...args) {
-          console.log("summernoteImageLinkInsert()", args);
-       },
+  components: {
+    QuillEditor
+  },
+  methods: {
+    getContents() {
+      return this.$refs.editor.getText();
     }
+  }
 }
 </script>
+
+<style>
+.ql-toolbar {
+    /* background-color: rgba(55, 65, 81, var(--tw-bg-opacity)); */
+    background-color: white;
+}
+
+.ql-container {
+    height: 500px;
+}
+
+.ql-editor {
+    background-color: rgba(55, 65, 81, var(--tw-bg-opacity));
+}
+
+</style>

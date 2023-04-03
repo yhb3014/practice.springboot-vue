@@ -45,6 +45,8 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
     data() {
         return {
@@ -52,20 +54,34 @@ export default {
             password: ''
         }
     },
+    computed: {
+        ...mapGetters({
+            errorState: 'getErrorState'
+        })
+    },
     methods: {
-        signIn() {
-            const params = {
-                emailId: this.emailId,
-                password: this.password
+        ...mapActions(['login']),
+
+        async signIn() {
+            if (this.emailId === '' || this.password === '') {
+                alert("???");
+                return;
             }
 
-            this.$axios
-                .post("/api/user/login", params)
-                .then((res) => {
-                    console.log(res);
-                }).catch((err) => {
-                    console.log(err);
-                })
+            try {
+                let loginResult = await this.login({emailId: this.emailId, password: this.password});
+                if (loginResult) {
+                    this.goToPages();
+                }
+            } catch (err) {
+                alert(err);
+            }
+        },
+
+        goToPages() {
+            this.$router.push({
+                name: "BoardList"
+            })
         }
     }
 }
