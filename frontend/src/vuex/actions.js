@@ -1,4 +1,10 @@
-import { EMAIL_ID, ERROR_STATE, IS_AUTH } from "./mutationType";
+import {
+  ACCESS_TOKEN,
+  EMAIL_ID,
+  ERROR_STATE,
+  IS_AUTH,
+  REFRESH_TOKEN,
+} from "./mutationType";
 import loginApi from "../service/loginApi";
 
 let setEmailId = ({ commit }, data) => {
@@ -13,6 +19,14 @@ let setIsAuth = ({ commit }, data) => {
   commit(IS_AUTH, data);
 };
 
+let setAccessToken = ({ commit }, data) => {
+  commit(ACCESS_TOKEN, data);
+};
+
+let setRefreshToken = ({ commit }, data) => {
+  commit(REFRESH_TOKEN, data);
+};
+
 let processResponse = (store, loginResponse) => {
   switch (loginResponse) {
     case "ERROR":
@@ -20,9 +34,11 @@ let processResponse = (store, loginResponse) => {
       setIsAuth(store, false);
       break;
     default:
-      setEmailId(store, loginResponse.emailId);
+      setEmailId(store, loginResponse.data.emailId);
       setErrorState(store, "");
       setIsAuth(store, true);
+      setAccessToken(store, loginResponse.data.data.accessToken);
+      setRefreshToken(store, loginResponse.data.data.refreshToken);
   }
 };
 

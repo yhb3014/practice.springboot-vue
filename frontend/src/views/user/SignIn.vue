@@ -63,26 +63,28 @@ export default {
         ...mapActions(['login']),
 
         async signIn() {
-            if (this.emailId === '' || this.password === '') {
-                alert("???");
+            if (this.emailId === '') {
+                alert("이메일 주소를 입력해주세요.");
+                return;
+            }
+
+            if (this.password === '') {
+                alert("비밀번호를 입력해주세요.");
                 return;
             }
 
             try {
                 let loginResult = await this.login({emailId: this.emailId, password: this.password});
                 if (loginResult) {
-                    this.goToPages();
+                    alert(this.emailId + " 로그인 성공");
+                    this.$router.push({
+                        name: "BoardList"
+                    })
                 }
             } catch (err) {
-                alert(err);
+                alert('로그인 정보를 확인할 수 없습니다.')
             }
         },
-
-        goToPages() {
-            this.$router.push({
-                name: "BoardList"
-            })
-        }
     }
 }
 </script>

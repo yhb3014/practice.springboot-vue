@@ -7,8 +7,14 @@ import SignUp from "@/views/user/SignUp.vue";
 import store from "@/vuex/store";
 
 const checkToken = () => (from, to, next) => {
-  const token = localStorage.getItem("accessToken");
-  if (token) {
+  const accessToken = localStorage.getItem("accessToken");
+  const refreshToken = localStorage.getItem("refreshToken");
+
+  if (!accessToken && refreshToken) {
+    store.dispatch("");
+  }
+
+  if (accessToken) {
     store.state.isLogin = true;
     return next();
   }

@@ -19,11 +19,16 @@ export default {
       if (userInfoResponse.data.length === 0) {
         return "ERROR";
       } else {
-        localStorage.setItem("accessToken", userInfoResponse.data.accessToken);
+        userInfoResponse.data.emailId = emailId;
+        localStorage.setItem(
+          "accessToken",
+          userInfoResponse.data.data.accessToken
+        );
         localStorage.setItem(
           "refreshToken",
-          userInfoResponse.data.refreshToken
+          userInfoResponse.data.data.refreshToken
         );
+        localStorage.setItem("grantType", userInfoResponse.data.data.grantType);
         return userInfoResponse;
       }
     } catch (err) {

@@ -22,6 +22,7 @@ public class SecurityConfig {
 
         private final JwtAuthenticationFilter jwtAuthenticationFilter;
         private final AuthenticationProvider authenticationProvider;
+        private final CorsConfig corsConfig;
 
         @Bean
         public WebSecurityCustomizer webSecurityCustomizer() {
@@ -49,6 +50,7 @@ public class SecurityConfig {
                                 .anyRequest().authenticated();
 
                 http
+                                .addFilter(corsConfig.corsFilter())
                                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                                 .authenticationProvider(authenticationProvider);
 

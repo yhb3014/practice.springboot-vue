@@ -48,10 +48,6 @@ export default {
     },
     methods: {
        signUp() {
-        console.log(this.userName);
-        console.log(this.emailId);
-        console.log(this.password);
-
         const params = {
             userName: this.userName,
             emailId: this.emailId,
@@ -61,9 +57,16 @@ export default {
         this.$axios
             .post("/api/user/join", params)
             .then((res) => {
-                console.log(res);
+                if (res.status === 200) {
+                    alert(res.data.emailId + " 회원 가입 성공");
+                    this.$router.push({
+                        name: "SignIn"
+                    })
+                } else {
+                    alert("회원 가입 실패");
+                }
             }).catch((err) => {
-                console.log(err);
+                alert(err);
             })
        }
     }

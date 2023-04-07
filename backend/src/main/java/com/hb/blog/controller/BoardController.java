@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hb.blog.domain.ResponseDto;
 import com.hb.blog.domain.User;
 import com.hb.blog.dto.BoardDto;
+import com.hb.blog.dto.ResponseDto;
 import com.hb.blog.service.BoardService;
 
 import lombok.RequiredArgsConstructor;

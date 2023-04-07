@@ -6,6 +6,7 @@ export default {
       refreshToken: state.refreshToken,
     };
   },
+  getNewAccessToken: (state) => state.accessToken,
   getErrorState: (state) => state.errorState,
   getIsAuth: (state) => state.isAuth,
   loggedIn(state) {

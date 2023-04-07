@@ -18,6 +18,7 @@ export default {
         signOut() {
             localStorage.removeItem("accessToken");
             localStorage.removeItem("refreshToken");
+            localStorage.removeItem("grantType");
             location.reload();
         }
     }

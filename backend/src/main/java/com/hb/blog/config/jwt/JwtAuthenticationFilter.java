@@ -8,9 +8,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hb.blog.config.auth.PrincipalDetailsService;
+import com.hb.blog.dto.ErrorCode;
+import com.hb.blog.dto.ResponseDto;
 
-import io.micrometer.common.util.StringUtils;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,30 +30,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        try {
+            String token = jwtTokenProvider.resolveToken(request);
+            String path = request.getRequestURI();
+            if (path.equals("/api/user/refresh") || path.equals("/api/user/login")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+            String userName = jwtTokenProvider.getUserNameByToken(token);
+            UserDetails user = principalDetailsService.loadUserByUsername(userName);
 
-        String token = resolveToken(request);
-        if (StringUtils.isEmpty(token) || token.equals("null")) {
+            if (jwtTokenProvider.isTokenValid(token, user)) {
+                Authentication authentication = jwtTokenProvider.getAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
             filterChain.doFilter(request, response);
-            return;
+        } catch (ExpiredJwtException e) {
+            ResponseDto<Object> responseDto = new ResponseDto<>(ErrorCode.JWT_ACCESS_TOKEN_EXPIRED.getStatus().value(),
+                    ErrorCode.JWT_ACCESS_TOKEN_EXPIRED.getMessage());
+            response.setStatus(responseDto.getStatus());
+            response.getWriter().write(new ObjectMapper().writeValueAsString(responseDto));
+            response.getWriter().flush();
         }
-
-        String userName = jwtTokenProvider.getUserNameByToken(token);
-        UserDetails user = principalDetailsService.loadUserByUsername(userName);
-
-        if (jwtTokenProvider.isTokenValid(token, user)) {
-            Authentication authentication = jwtTokenProvider.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
-        filterChain.doFilter(request, response);
-    }
-
-    private String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader(JwtProperties.HEADER_STRING);
-        if (!StringUtils.isEmpty(bearerToken) && bearerToken.startsWith(JwtProperties.TOKEN_PREFIX)) {
-            return bearerToken.substring(7);
-        }
-
-        return null;
     }
 
 }

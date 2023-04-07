@@ -1,7 +1,7 @@
 package com.hb.blog.controller;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hb.blog.config.jwt.TokenInfo;
 import com.hb.blog.domain.User;
 import com.hb.blog.dto.LoginDto;
+import com.hb.blog.dto.ResponseDto;
 import com.hb.blog.service.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -28,9 +30,9 @@ public class UserController {
      * @return
      */
     @PostMapping("/join")
-    public ResponseEntity<User> join(@RequestBody User user) {
+    public ResponseDto<User> join(@RequestBody User user) {
 
-        return new ResponseEntity<>(userService.join(user), HttpStatus.OK);
+        return new ResponseDto<User>(HttpStatus.OK.value(), userService.join(user));
     }
 
     /**
@@ -40,8 +42,22 @@ public class UserController {
      * @return
      */
     @PostMapping("/login")
-    public ResponseEntity<TokenInfo> login(@RequestBody LoginDto loginDto) {
+    public ResponseDto<TokenInfo> login(@RequestBody LoginDto loginDto) {
 
-        return new ResponseEntity<>(userService.login(loginDto), HttpStatus.OK);
+        return new ResponseDto<TokenInfo>(HttpStatus.OK.value(), userService.login(loginDto));
+    }
+
+    /**
+     * accessToken 재발급
+     * 
+     * @param tokenInfo
+     * @return
+     */
+    @PostMapping("/refresh")
+    public ResponseDto<String> refresh(HttpServletRequest request) {
+
+        // return new ResponseDto<String>(HttpStatus.OK.value(),
+        // userService.getNewAccessToken(tokenInfo));
+        return new ResponseDto<String>(HttpStatus.OK.value(), userService.getNewAccessToken(request));
     }
 }
