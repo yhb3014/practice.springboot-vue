@@ -1,7 +1,6 @@
 package com.hb.blog.controller;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,8 +55,6 @@ public class UserController {
     @PostMapping("/refresh")
     public ResponseDto<String> refresh(HttpServletRequest request) {
 
-        // return new ResponseDto<String>(HttpStatus.OK.value(),
-        // userService.getNewAccessToken(tokenInfo));
         return new ResponseDto<String>(HttpStatus.OK.value(), userService.getNewAccessToken(request));
     }
 }

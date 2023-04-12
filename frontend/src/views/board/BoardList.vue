@@ -21,10 +21,10 @@
                 </thead>
                 <tbody>
                   <tr class="border-b border-gray-500 transition duration-300 hover:bg-gray-700 cursor-pointer"
-                  v-for="list in boardList" :key="list.id">
+                  v-for="list in boardList" :key="list.id" v-on:click="getBoardDetail(`${list.id}`)">
                     <td class="whitespace-nowrap px-6 py-4 font-medium">{{ list.id }}</td>
-                    <td class="whitespace-nowrap px-6 py-4"><a v-on:click="getBoardContent(`${list.id}`)">{{ list.title }}</a></td>
-                    <td class="whitespace-nowrap px-6 py-4">{{ list.user }}</td>
+                    <td class="whitespace-nowrap px-6 py-4">{{ list.title }}</td>
+                    <td class="whitespace-nowrap px-6 py-4">{{ list.userName }}</td>
                     <td class="whitespace-nowrap px-6 py-4">{{ list.createDate }}</td>
                     <td class="whitespace-nowrap px-6 py-4">{{ list.count }}</td>
                   </tr>
@@ -34,31 +34,48 @@
           </div>
         </div>
       </div>
+      <div class="flex justify-center mt-10">
+        <Pagenation />
+      </div>
     </div>
   </template>
   
-  <script>
-  export default {
-    data() { // 변수생성
-      return {
-        requestBody: {}, // 리스트 페이지 데이터전송
-        boardList: {}, // 리스트 데이터
-      }
+<script>
+import Pagenation from "@/components/Pagenation.vue"
+
+export default {
+  components: {
+    Pagenation
+  },
+  data() { // 변수생성
+    return {
+      requestBody: {}, // 리스트 페이지 데이터전송
+      boardList: {}, // 리스트 데이터
+    }
+  },
+  mounted() {
+    this.getBoardList()
+  },
+  methods: {
+    getBoardList() {
+      this.$axios
+          .get("/api/board/list")
+          .then((res) => {
+              this.boardList = res.data.data.content
+              console.log(res)
+          }).catch((err) => {
+              console.log(err)
+        })
     },
-    mounted() {
-      this.getBoardList()
-    },
-    methods: {
-      getBoardList() {
-          this.$axios
-              .get("/api/board/list")
-              .then((res) => {
-                  this.boardList = res.data
-                  console.log(res)
-              }).catch((err) => {
-                  console.log(err)
-            })
+
+    getBoardDetail(id) {
+      this.$router.push({
+        name: "BoardDetail",
+        params: {
+          id : id
         }
-      }
+      })
+    }
   }
-  </script>
+}
+</script>

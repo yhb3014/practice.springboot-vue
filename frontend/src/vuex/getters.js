@@ -1,5 +1,5 @@
 export default {
-  getEmailId: (state) => state.emailId,
+  getUserName: (state) => state.userName,
   getToken: (state) => {
     return {
       accessToken: state.accessToken,

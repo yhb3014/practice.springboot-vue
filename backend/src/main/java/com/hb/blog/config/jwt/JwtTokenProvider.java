@@ -66,7 +66,7 @@ public class JwtTokenProvider {
         long now = (new Date()).getTime();
         Date accessTokenExpiresIn = new Date(now + accessTokenExpiration);
 
-        String accessToken = newAccessToken(authentication, authorities, accessTokenExpiresIn);
+        String accessToken = newAccessToken(authentication.getName(), authorities, accessTokenExpiresIn);
 
         String refreshToken = Jwts.builder()
                 .setExpiration(new Date(now + refreshTokenExpiration))
@@ -90,9 +90,9 @@ public class JwtTokenProvider {
      * @param accessTokenExpiresIn
      * @return
      */
-    public String newAccessToken(Authentication authentication, String authorities, Date accessTokenExpiresIn) {
+    public String newAccessToken(String userName, String authorities, Date accessTokenExpiresIn) {
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())
+                .setSubject(userName)
                 .claim(AUTHORITIES_KEY, authorities)
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -108,13 +108,13 @@ public class JwtTokenProvider {
      * @param authentication
      * @return
      */
-    public String validateRefreshToken(String refreshToken, Authentication authentication) {
+    public String validateRefreshToken(String refreshToken, String userName) {
         String accessToken = null;
         try {
             long now = (new Date()).getTime();
             Date accessTokenExpiresIn = new Date(now + accessTokenExpiration);
             if (!isTokenExpired(refreshToken)) {
-                accessToken = newAccessToken(authentication, refreshToken, accessTokenExpiresIn);
+                accessToken = newAccessToken(userName, refreshToken, accessTokenExpiresIn);
 
                 return accessToken;
             }
@@ -185,7 +185,7 @@ public class JwtTokenProvider {
         return (getUserNameByToken(token).equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
-    private boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         return paresClaims(token).getExpiration().before(new Date());
     }
 

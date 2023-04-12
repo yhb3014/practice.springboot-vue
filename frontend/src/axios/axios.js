@@ -20,7 +20,7 @@ axios.interceptors.response.use(
       await axios
         .post("/api/user/refresh")
         .then((res) => {
-          localStorage.setItem("accessToken", res.data);
+          localStorage.setItem("accessToken", res.data.data);
           window.location.reload();
         })
         .catch((error) => {

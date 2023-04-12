@@ -1,9 +1,9 @@
 package com.hb.blog.service;
 
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.hb.blog.domain.Board;
@@ -19,20 +19,18 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
 
-    public List<BoardDto> getBoardList() {
-        List<Board> boardEntites = boardRepository.findAll();
-        List<BoardDto> boardList = new ArrayList<>();
-        for (Board entity : boardEntites) {
-            BoardDto board = BoardDto.builder()
-                    .id(entity.getId())
-                    .title(entity.getTitle())
-                    .content(entity.getContent())
-                    .user(entity.getUser())
-                    .createDate(entity.getCreateDate().format(DateTimeFormatter.ofPattern("yyyy-mm-dd")))
-                    .build();
-            boardList.add(board);
-        }
+    public Page<BoardDto> getBoardList(String title, Pageable pageable) {
+        // List<Board> boardEntites = boardRepository.findAllFetchJoin();
+        // List<BoardDto> boardList = new ArrayList<>();
+        // for (Board entity : boardEntites) {
+        // BoardDto board = new BoardDto(entity);
+        // boardList.add(board);
+        // }
 
+        // return boardList;
+
+        Page<Board> boardEntites = findByTitleContaining(title, pageable);
+        Page<BoardDto> boardList = boardEntites.map(m -> new BoardDto(m));
         return boardList;
     }
 
@@ -42,7 +40,7 @@ public class BoardService {
         return new BoardDto(entity);
     }
 
-    public BoardDto doPost(BoardDto boardDto, User user) {
+    public BoardDto insertBoard(BoardDto boardDto, User user) {
         Board board = Board.builder()
                 .title(boardDto.getTitle())
                 .content(boardDto.getContent())
@@ -64,5 +62,15 @@ public class BoardService {
     public void deleteBoard(Long id) {
         Board entity = boardRepository.findById(id).orElseThrow(() -> new RuntimeException("?"));
         boardRepository.delete(entity);
+    }
+
+    public int updateView(Long id) {
+
+        return boardRepository.updateView(id);
+    }
+
+    public Page<Board> findByTitleContaining(String title, Pageable pageable) {
+
+        return boardRepository.findByTitleContaining(title, pageable);
     }
 }

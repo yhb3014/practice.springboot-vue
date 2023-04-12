@@ -5,7 +5,6 @@ import java.util.HashMap;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -58,8 +57,8 @@ public class UserService {
      * @return
      */
     public TokenInfo login(LoginDto loginDto) {
-        String emailId = loginDto.getEmailId();
-        User loginUser = getUserByEmailId(emailId);
+        User loginUser = getUserByUserName(loginDto.getUserName());
+        String emailId = loginUser.getEmailId();
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 loginUser.getUserName(), loginDto.getPassword());
@@ -84,19 +83,6 @@ public class UserService {
     }
 
     public String getNewAccessToken(HttpServletRequest request) {
-        // RefreshToken refreshToken = getRefreshToken(tokenInfo.getRefreshToken());
-        // User loginUser = getUserByEmailId(refreshToken.getTokenKey());
-
-        // UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new
-        // UsernamePasswordAuthenticationToken(
-        // loginUser.getUserName(), loginUser.getPassword());
-        // Authentication authentication =
-        // authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-
-        // String newAccessToken = jwtTokenProvider.validateRefreshToken(tokenInfo,
-        // authentication);
-        // return newAccessToken;
-
         String bearerToken = jwtTokenProvider.resolveToken(request);
         HashMap<String, String> payloadMap = jwtTokenProvider.getPayloadByToken(bearerToken);
         String userName = payloadMap.get("sub");
@@ -104,9 +90,8 @@ public class UserService {
         User user = getUserByUserName(userName);
         RefreshToken refreshToken = getRefreshTokenByTokenKey(user.getEmailId());
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        String newAccessToken = jwtTokenProvider.validateRefreshToken(refreshToken.getRefreshToken(), authentication);
+        String newAccessToken = jwtTokenProvider.validateRefreshToken(refreshToken.getRefreshToken(),
+                user.getUserName());
 
         return newAccessToken;
     }

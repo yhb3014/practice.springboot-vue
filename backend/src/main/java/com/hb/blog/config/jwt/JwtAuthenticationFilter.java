@@ -33,10 +33,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String token = jwtTokenProvider.resolveToken(request);
             String path = request.getRequestURI();
-            if (path.equals("/api/user/refresh") || path.equals("/api/user/login")) {
+
+            if (path.startsWith("/api/user") || token == null) {
                 filterChain.doFilter(request, response);
                 return;
             }
+
             String userName = jwtTokenProvider.getUserNameByToken(token);
             UserDetails user = principalDetailsService.loadUserByUsername(userName);
 
@@ -44,6 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+
             filterChain.doFilter(request, response);
         } catch (ExpiredJwtException e) {
             ResponseDto<Object> responseDto = new ResponseDto<>(ErrorCode.JWT_ACCESS_TOKEN_EXPIRED.getStatus().value(),

@@ -1,14 +1,14 @@
 import {
   ACCESS_TOKEN,
-  EMAIL_ID,
   ERROR_STATE,
   IS_AUTH,
   REFRESH_TOKEN,
+  USER_NAME,
 } from "./mutationType";
 import loginApi from "../service/loginApi";
 
-let setEmailId = ({ commit }, data) => {
-  commit(EMAIL_ID, data);
+let setUserName = ({ commit }, data) => {
+  commit(USER_NAME, data);
 };
 
 let setErrorState = ({ commit }, data) => {
@@ -34,7 +34,7 @@ let processResponse = (store, loginResponse) => {
       setIsAuth(store, false);
       break;
     default:
-      setEmailId(store, loginResponse.data.emailId);
+      setUserName(store, loginResponse.data.userName);
       setErrorState(store, "");
       setIsAuth(store, true);
       setAccessToken(store, loginResponse.data.data.accessToken);
@@ -43,8 +43,8 @@ let processResponse = (store, loginResponse) => {
 };
 
 export default {
-  async login(store, { emailId, password }) {
-    let loginResponse = await loginApi.doLogin(emailId, password);
+  async login(store, { userName, password }) {
+    let loginResponse = await loginApi.doLogin(userName, password);
     processResponse(store, loginResponse);
     return store.getters.getIsAuth;
   },

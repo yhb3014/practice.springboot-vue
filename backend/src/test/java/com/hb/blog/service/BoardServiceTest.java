@@ -76,24 +76,9 @@ public class BoardServiceTest {
                 .content("test1")
                 .count(1)
                 .build();
-        boardService.doPost(boardDto, user);
+        boardService.insertBoard(boardDto, user);
 
         verify(boardRepository, times(1)).save(any());
-    }
-
-    @Test
-    void testUpdateBoard() {
-        BoardDto boardDto = BoardDto.builder()
-                .title("test1")
-                .content("test1")
-                .count(1)
-                .build();
-
-        when(boardRepository.findById(anyLong())).thenReturn(Optional.of(boardDto.toEntity()));
-
-        BoardDto result = boardService.updateBoard(boardDto);
-
-        assertThat(result.getTitle()).isEqualTo(boardDto.getTitle());
     }
 
     @Test

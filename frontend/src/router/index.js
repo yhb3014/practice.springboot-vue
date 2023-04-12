@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import PageHome from "@/views/PageHome.vue";
 import BoardList from "@/views/board/BoardList.vue";
 import BoardWrite from "@/views/board/BoardWrite.vue";
+import BoardDetail from "@/views/board/BoardDetail.vue";
 import SignIn from "@/views/user/SignIn.vue";
 import SignUp from "@/views/user/SignUp.vue";
 import store from "@/vuex/store";
@@ -48,6 +49,12 @@ const routes = [
     path: "/board/write",
     name: "BoardWrite",
     component: BoardWrite,
+    beforeEnter: checkToken(),
+  },
+  {
+    path: "/board/view/:id",
+    name: "BoardDetail",
+    component: BoardDetail,
     beforeEnter: checkToken(),
   },
 ];

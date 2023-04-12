@@ -8,8 +8,8 @@
                 <input type="hidden" name="remember" value="true">
                 <div class="-space-y-px rounded-md shadow-sm">
                     <div class="mb-5">
-                        <label for="emailId" class="block text-left text-sm mb-1">Email address</label>
-                        <input v-model="emailId" type="email" autocomplete="email" required class="block w-full appearance-none rounded-md border border-gray-500/30 px-3 py-2 text-sm placeholder-gray-500/80 shadow-sm focus:border-gray-500 focus:outline-none focus:ring-0 bg-gray-500 sm:text-base">
+                        <label for="userName" class="block text-left text-sm mb-1">ID</label>
+                        <input v-model="userName" type="text" autocomplete="nickname" required class="block w-full appearance-none rounded-md border border-gray-500/30 px-3 py-2 text-sm placeholder-gray-500/80 shadow-sm focus:border-gray-500 focus:outline-none focus:ring-0 bg-gray-500 sm:text-base">
                     </div>
                     <div>
                         <label for="password" class="block text-left text-sm mb-1">Password</label>
@@ -50,7 +50,7 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
     data() {
         return {
-            emailId: '',
+            userName: '',
             password: ''
         }
     },
@@ -63,8 +63,8 @@ export default {
         ...mapActions(['login']),
 
         async signIn() {
-            if (this.emailId === '') {
-                alert("이메일 주소를 입력해주세요.");
+            if (this.userName === '') {
+                alert("아이디를 입력해주세요.");
                 return;
             }
 
@@ -74,9 +74,9 @@ export default {
             }
 
             try {
-                let loginResult = await this.login({emailId: this.emailId, password: this.password});
+                let loginResult = await this.login({userName: this.userName, password: this.password});
                 if (loginResult) {
-                    alert(this.emailId + " 로그인 성공");
+                    alert(this.userName + " 로그인 성공");
                     this.$router.push({
                         name: "BoardList"
                     })

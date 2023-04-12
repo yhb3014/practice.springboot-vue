@@ -3,7 +3,6 @@ package com.hb.blog.dto;
 import java.time.format.DateTimeFormatter;
 
 import com.hb.blog.domain.Board;
-import com.hb.blog.domain.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,22 +25,15 @@ public class BoardDto {
 
     private String createDate;
 
-    private User user;
+    private String userName;
 
     public BoardDto(Board board) {
         this.id = board.getId();
         this.title = board.getTitle();
         this.content = board.getContent();
         this.count = board.getCount();
-        this.createDate = board.getCreateDate().format(DateTimeFormatter.ofPattern("yyyy-mm-dd"));
-        this.user = board.getUser();
+        this.createDate = board.getCreateDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
+        this.userName = board.getUser().getUserName();
     }
 
-    public Board toEntity() {
-        return Board.builder()
-                .title(title)
-                .content(content)
-                .user(user)
-                .build();
-    }
 }

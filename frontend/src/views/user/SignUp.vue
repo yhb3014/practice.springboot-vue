@@ -57,8 +57,9 @@ export default {
         this.$axios
             .post("/api/user/join", params)
             .then((res) => {
-                if (res.status === 200) {
-                    alert(res.data.emailId + " 회원 가입 성공");
+                if (res.status == 200) {
+                    console.log(res.status)
+                    alert(res.data.data.emailId + " 회원 가입 성공");
                     this.$router.push({
                         name: "SignIn"
                     })

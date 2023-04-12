@@ -2,8 +2,8 @@ import * as types from "./mutationType";
 // import VueCookies from "vue-cookies";
 
 export default {
-  [types.EMAIL_ID](state, emailId) {
-    state.emailId = emailId;
+  [types.USER_NAME](state, userName) {
+    state.userName = userName;
   },
   [types.ERROR_STATE](state, errorState) {
     state.errorState = errorState;

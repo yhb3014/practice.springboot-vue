@@ -13,6 +13,10 @@ export default {
   methods: {
     getContents() {
       return this.$refs.editor.getText();
+    },
+
+    setContents(text) {
+      return this.$refs.editor.setText(text);
     }
   }
 }
